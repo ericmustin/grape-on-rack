@@ -11,6 +11,7 @@ gem 'mime-types'
 gem 'newrelic_rpm'
 gem 'nokogiri'
 gem 'rack-cors'
+gem 'ddtrace'
 
 group :development do
   gem 'guard'

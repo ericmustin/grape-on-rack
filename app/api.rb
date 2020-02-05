@@ -1,3 +1,11 @@
+# require 'ddtrace'
+
+# Datadog.configure do |c|
+#   c.use :grape
+#   c.use :rack
+#   c.tracer debug: true
+# end
+
 module Acme
   class API < Grape::API
     prefix 'api'
