@@ -37,6 +37,68 @@ Loading NewRelic in developer mode ...
 [2013-06-20 08:57:58] INFO  WEBrick::HTTPServer#start: pid=247 port=9292
 ```
 
+### Datadog Distributed Tracing
+
+Navigate to http://localhost:9292/api/ping with a browser or use `curl`.
+
+```
+- [Ensure the datadog agent is installed locally and listening for traces at localhost:8126](https://docs.datadoghq.com/agent/)
+- In a new terminal window run:
+
+$  curl -H "X-Datadog-Trace-Id: 3238677264721744442" -H "x-datadog-parent-id: 0" -H "x-datadog-sampling-priority: 1" -H "x-datadog-origin: synthetics" http://localhost:9292/api/ping
+
+
+{"ping":"pong"}
+
+In your debug logs you should see output such as:
+
+ Name: rack.request
+Span ID: 3298839092784897965
+Parent ID: 0
+Trace ID: 3238677264721744442
+Type: web
+Service: rack
+Resource: Acme::Ping#/ping
+Error: 0
+Start: 1580914828629018880
+End: 1580914828651560960
+Duration: 22542000
+Allocations: 18505
+Tags: [
+   language => ruby,
+   http.method => GET,
+   http.url => http://localhost:9292/api/ping,
+   http.base_url => http://localhost:9292,
+   http.status_code => 200,
+   http.response.headers.content_type => application/json,
+   _dd.origin => synthetics]
+Metrics: [
+   system.pid => 90198.0,
+   _sampling_priority_v1 => 1.0],
+ 
+ Name: grape.endpoint_run
+Span ID: 3839358258196324476
+Parent ID: 3298839092784897965
+Trace ID: 3238677264721744442
+Type: web
+Service: grape
+Resource: Acme::Ping#/ping
+Error: 0
+Start: 1580914828646574080
+End: 1580914828648083968
+Duration: 1510000
+Allocations: 743
+Tags: [
+   grape.route.endpoint => Acme::Ping,
+   grape.route.path => /ping]
+Metrics: [ ]]
+
+
+Note that the Trace ID matches the x-datadog-trace-id sent in the curl request headers
+
+```
+
+
 ### Hello World
 
 Navigate to http://localhost:9292/api/ping with a browser or use `curl`.
